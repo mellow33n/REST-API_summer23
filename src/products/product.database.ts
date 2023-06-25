@@ -15,68 +15,69 @@ function loadProducts(): Products {
 }
 
 function saveProducts() {
-    try {
-        fs.writeFileSync("./products.json", JSON.stringify(products), "utf-8");
-        console.log("Products saved successfully!")
-    } catch (error) {
-        console.log("Error", error)
-    }
+  try {
+    fs.writeFileSync("./products.json", JSON.stringify(products), "utf-8");
+    console.log("Products saved successfully!");
+  } catch (error) {
+    console.log("Error", error);
+  }
 }
 
+export const findAll = async (): Promise<UnitProduct[]> =>
+  Object.values(products);
 
-export const findAll = async () : Promise<UnitProduct[]> => Object.values(products)
+export const findOne = async (id: string): Promise<UnitProduct> => products[id];
 
-export const findOne = async (id : string) : Promise<UnitProduct> => products[id]
+export const create = async (
+  productInfo: Product
+): Promise<null | UnitProduct> => {
+  let id = random();
 
-export const create = async (productInfo : Product) : Promise<null | UnitProduct> => {
+  let product = await findOne(id);
 
-    let id = random()
+  while (product) {
+    id = random();
+    await findOne(id);
+  }
 
-    let product = await findOne(id)
+  products[id] = {
+    id: id,
+    ...productInfo,
+  };
 
-    while (product) {
-        id = random ()
-        await findOne(id)
-    }
+  saveProducts();
 
-    products[id] = {
-        id : id,
-        ...productInfo
-    }
+  return products[id];
+};
 
-    saveProducts()
+export const update = async (
+  id: string,
+  updateValues: Product
+): Promise<UnitProduct | null> => {
+  const product = await findOne(id);
 
-    return products[id]
-}
+  if (!product) {
+    return null;
+  }
 
-export const update = async (id : string, updateValues : Product) : Promise<UnitProduct | null> => {
+  products[id] = {
+    id,
+    ...updateValues,
+  };
 
-    const product = await findOne(id) 
+  saveProducts();
 
-    if (!product) {
-        return null
-    }
+  return products[id];
+};
 
-    products[id] = {
-        id,
-        ...updateValues
-    }
+export const remove = async (id: string): Promise<null | void> => {
+  const product = await findOne(id);
 
-    saveProducts()
+  if (!product) {
+    return null;
+  }
 
-    return products[id]
-}
+  delete products[id];
 
-export const remove = async (id : string) : Promise<null | void> => {
-
-    const product = await findOne(id)
-
-    if (!product) {
-        return null
-    }
-
-    delete products[id]
-
-    saveProducts()
-
-}
+  saveProducts();
+};
