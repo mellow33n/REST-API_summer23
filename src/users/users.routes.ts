@@ -5,6 +5,13 @@ import * as database from "./user.database";
 
 export const userRouter = express.Router();
 
+/* 
+userRouter.get("/users"): 
+This function handles a GET request to "/users". 
+It calls the findAll function from the database module to retrieve all users. 
+If no users are found, it returns a 404 status code with a message. 
+If users are found, it returns a 200 status code with the total number of users and the array of all users.
+ */
 userRouter.get("/users", async (req: Request, res: Response) => {
   try {
     const allUsers: UnitUser[] = await database.findAll();
@@ -23,7 +30,14 @@ userRouter.get("/users", async (req: Request, res: Response) => {
   }
 });
 
-userRouter.get("/user/:id", async (req: Request, res: Response) => {
+/* 
+userRouter.get("/users/:id"): 
+This function handles a GET request to "/users/:id" where :id represents a specific user's ID. 
+It calls the findOne function from the database module to retrieve the user with the specified ID. 
+If the user is not found, it returns a 404 status code with an error message. 
+If the user is found, it returns a 200 status code with the user object.
+ */
+userRouter.get("/users/:id", async (req: Request, res: Response) => {
   try {
     const user: UnitUser = await database.findOne(req.params.id);
 
@@ -39,6 +53,16 @@ userRouter.get("/user/:id", async (req: Request, res: Response) => {
   }
 });
 
+/* 
+userRouter.post("/register"): 
+This function handles a POST request to "/register" for user registration. 
+It extracts the username, email, and password from the request body. 
+If any of these fields are missing, it returns a 400 status code with an error message. 
+It calls the findByEmail function from the database module to check if the email is already registered. 
+If the email is found, it returns a 400 status code with an error message. 
+If the email is not found, it calls the create function from the database module to create a new user 
+and returns a 201 status code with the newly created user object.
+ */
 userRouter.post("/register", async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
@@ -60,11 +84,23 @@ userRouter.post("/register", async (req: Request, res: Response) => {
     const newUser = await database.create(req.body);
 
     return res.status(StatusCodes.CREATED).json({ newUser });
+
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
 });
 
+/* 
+userRouter.post("/login"): 
+This function handles a POST request to "/login" for user login. It extracts the email and password from the request body. 
+If any of these fields are missing, it returns a 400 status code with an error message. 
+It calls the findByEmail function from the database module to check if the email exists. 
+If the email is not found, it returns a 404 status code with an error message. 
+If the email is found, it calls the comparePassword function from the database module 
+to check if the supplied password matches the stored password. 
+If the passwords don't match, it returns a 400 status code with an error message. 
+If the passwords match, it returns a 200 status code with the user object.
+ */
 userRouter.post("/login", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -92,12 +128,23 @@ userRouter.post("/login", async (req: Request, res: Response) => {
     }
 
     return res.status(StatusCodes.OK).json({ user });
+
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
 });
 
-userRouter.put("/user/:id", async (req: Request, res: Response) => {
+/* 
+userRouter.put('/users/:id'): 
+This function handles a PUT request to "/user/:id" where :id represents a specific user's ID. 
+It extracts the username, email, and password from the request body. 
+If any of these fields are missing, it returns a 401 status code with an error message. 
+It calls the findOne function from the database module to check if the user with the specified ID exists. 
+If the user is not found, it returns a 404 status code with an error message. 
+If the user is found, it calls the update function from the database module 
+to update the user's details and returns a 201 status code with the updated user object.
+ */
+userRouter.put("/users/:id", async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
 
@@ -118,12 +165,22 @@ userRouter.put("/user/:id", async (req: Request, res: Response) => {
     const updateUser = await database.update(req.params.id, req.body);
 
     return res.status(201).json({ updateUser });
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error });
   }
 });
 
+/* 
+userRouter.delete("/user/:id"): 
+This function handles a DELETE request to "/user/:id" where :id represents a specific user's ID. 
+It extracts the id from the request parameters. 
+It calls the findOne function from the database module to check if the user with the specified ID exists. 
+If the user is not found, it returns a 404 status code with an error message. 
+If the user is found, it calls the remove function from the database module 
+to delete the user and returns a 200 status code with a success message.
+ */
 userRouter.delete("/user/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
@@ -139,6 +196,7 @@ userRouter.delete("/user/:id", async (req: Request, res: Response) => {
     await database.remove(id);
 
     return res.status(StatusCodes.OK).json({ msg: "User deleted" });
+    
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
