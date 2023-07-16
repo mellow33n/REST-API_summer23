@@ -2,7 +2,7 @@ import { Product, Products, UnitProduct } from "./product.interface";
 import { v4 as random } from "uuid";
 import fs from "fs";
 
-let products: Products = loadProducts();
+
 
 function loadProducts(): Products {
   try {
@@ -14,6 +14,8 @@ function loadProducts(): Products {
   }
 }
 
+let products: Products = loadProducts();
+
 function saveProducts() {
   try {
     fs.writeFileSync("./products.json", JSON.stringify(products), "utf-8");
@@ -23,19 +25,18 @@ function saveProducts() {
   }
 }
 
-export const findAll = async (): Promise<UnitProduct[]> =>
-  Object.values(products);
+export const findAll = async (): Promise<UnitProduct[]> => Object.values(products);
 
 export const findOne = async (id: string): Promise<UnitProduct> => products[id];
 
-export const create = async (
-  productInfo: Product
-): Promise<null | UnitProduct> => {
+export const create = async (productInfo: Product): Promise<null | UnitProduct> => {
   let id = random();
-
   let product = await findOne(id);
 
   while (product) {
+    let n = 0
+    console.log(n+=n);
+    
     id = random();
     await findOne(id);
   }

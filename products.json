@@ -1,9 +1,9 @@
 {
-  "e31c4c44-734f-4d73-8830-6e8df0397f7b": {
-    "id": "e31c4c44-734f-4d73-8830-6e8df0397f7b",
-    "name": "Wrist watch",
-    "price": 500,
-    "quantity": 50,
-    "image": "image_url.png"
+  "b731ea1b-ce65-4033-937f-48852a2a6885": {
+    "id": "b731ea1b-ce65-4033-937f-48852a2a6885",
+    "name": "first product",
+    "price": 300,
+    "quantity": 23,
+    "image": "image.url.png"
   }
 }

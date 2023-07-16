@@ -66,7 +66,7 @@ and returns a 201 status code with the newly created user object.
 userRouter.post("/register", async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
-
+    
     if (!username || !email || !password) {
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -181,7 +181,7 @@ If the user is not found, it returns a 404 status code with an error message.
 If the user is found, it calls the remove function from the database module 
 to delete the user and returns a 200 status code with a success message.
  */
-userRouter.delete("/user/:id", async (req: Request, res: Response) => {
+userRouter.delete("/users/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
 
