@@ -6,7 +6,7 @@ import fs from "fs";
 
 function loadProducts(): Products {
   try {
-    const data = fs.readFileSync("./products.json", "utf-8");
+    const data = fs.readFileSync("./API/products.json", "utf-8");
     return JSON.parse(data);
   } catch (error) {
     console.log(`Error ${error}`);
@@ -18,7 +18,7 @@ let products: Products = loadProducts();
 
 function saveProducts() {
   try {
-    fs.writeFileSync("./products.json", JSON.stringify(products), "utf-8");
+    fs.writeFileSync("./API/products.json", JSON.stringify(products), "utf-8");
     console.log("Products saved successfully!");
   } catch (error) {
     console.log("Error", error);

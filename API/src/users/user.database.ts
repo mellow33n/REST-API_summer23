@@ -11,7 +11,7 @@ If an error occurs during the process, it logs the error and returns an empty ob
 */
 function loadUsers(): Users {
   try {
-    const data = fs.readFileSync("./users.json", "utf-8");
+    const data = fs.readFileSync("./API/users.json", "utf-8");
     return JSON.parse(data);
   } catch (error) {
     console.log(`Error ${error}`);
@@ -30,7 +30,7 @@ If an error occurs during the process, it logs the error.
 */
 function saveUsers() {
   try {
-    fs.writeFileSync("./users.json", JSON.stringify(users), "utf-8");
+    fs.writeFileSync("./API/users.json", JSON.stringify(users), "utf-8");
     console.log(`User saved successfully!`);
   } catch (error) {
     console.log(`Error : ${error}`);
@@ -51,7 +51,12 @@ that resolves to the UnitUser object corresponding to that id in the users objec
 */
 export const findOne = async (id: string): Promise<UnitUser> => users[id];
 
-/* create: This function takes a userData object as input and returns a promise that resolves to the newly created UnitUser object. It generates a random id using the uuid package and checks if a user with that id already exists. If a user with that id exists, it generates a new id until a unique one is found. It then hashes the userData object's password using bcrypt and saves the hashed password in the UnitUser object. The UnitUser object is added to the users object, saved using saveUsers, and returned. */
+/* create: 
+This function takes a userData object as input and returns a promise that resolves to the newly created UnitUser object. 
+It generates a random id using the uuid package and checks if a user with that id already exists. 
+If a user with that id exists, it generates a new id until a unique one is found. 
+It then hashes the userData object's password using bcrypt and saves the hashed password in the UnitUser object. 
+The UnitUser object is added to the users object, saved using saveUsers, and returned. */
 export const create = async (userData: UnitUser): Promise<UnitUser | null> => {
   let id = random();
   let check_user = await findOne(id);
